@@ -238,14 +238,8 @@ function endsWith(str, substr) {
  *   formatTime(0, 0) => "00:00"
  */
 function formatTime(minutes, seconds) {
-  let min = minutes.toString();
-  let sec = seconds.toString();
-  if (min.length === 1) {
-    min = `0${min}`;
-  }
-  if (sec.length === 1) {
-    sec = `0${sec}`;
-  }
+  const min = minutes <= 9 ? `0${minutes}` : minutes.toString();
+  const sec = seconds <= 9 ? `0${seconds}` : seconds.toString();
   return `${min}:${sec}`;
 }
 
@@ -274,8 +268,8 @@ function reverseString(str) {
  *   orderAlphabetically('textbook') => 'bekoottx'
  *   orderAlphabetically('abc123xyz') => '123abcxyz'
  */
-function orderAlphabetically(/* str */) {
-  throw new Error('Not implemented');
+function orderAlphabetically(str) {
+  return str.split('').sort().join('');
 }
 
 /**
@@ -290,8 +284,8 @@ function orderAlphabetically(/* str */) {
  *   containsSubstring('JavaScript is Fun', 'Python') => false
  *   containsSubstring('12345', '34') => true
  */
-function containsSubstring(/* str, substring */) {
-  throw new Error('Not implemented');
+function containsSubstring(str, substring) {
+  return str.includes(substring);
 }
 
 /**
@@ -367,8 +361,18 @@ function findLongestWord(sentence) {
  *   reverseWords('Hello World') => 'olleH dlroW'
  *   reverseWords('The Quick Brown Fox') => 'ehT kciuQ nworB xoF'
  */
-function reverseWords(/* str */) {
-  throw new Error('Not implemented');
+function reverseWords(str) {
+  const splitedStr = str.split(' ');
+  let finalStr = '';
+  for (let i = 0; i < splitedStr.length; i += 1) {
+    const wordReverse = splitedStr[i].split('').reverse().join('');
+    if (splitedStr.length - i > 1) {
+      finalStr += `${wordReverse} `;
+    } else {
+      finalStr += wordReverse;
+    }
+  }
+  return finalStr;
 }
 
 /**
@@ -382,8 +386,16 @@ function reverseWords(/* str */) {
  *   invertCase('JavaScript is Fun') => 'jAVAsCRIPT IS fUN'
  *   invertCase('12345') => '12345'
  */
-function invertCase(/* str */) {
-  throw new Error('Not implemented');
+function invertCase(str) {
+  let finalStr = '';
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] === str[i].toLowerCase()) {
+      finalStr += str[i].toUpperCase();
+    } else {
+      finalStr += str[i].toLowerCase();
+    }
+  }
+  return finalStr;
 }
 
 /**
@@ -399,8 +411,8 @@ function invertCase(/* str */) {
  *   getStringFromTemplate('John','Doe') => 'Hello, John Doe!'
  *   getStringFromTemplate('Chuck','Norris') => 'Hello, Chuck Norris!'
  */
-function getStringFromTemplate(/* firstName, lastName */) {
-  throw new Error('Not implemented');
+function getStringFromTemplate(firstName, lastName) {
+  return `Hello, ${firstName} ${lastName}!`;
 }
 
 /**
@@ -413,8 +425,8 @@ function getStringFromTemplate(/* firstName, lastName */) {
  *   extractNameFromTemplate('Hello, John Doe!') => 'John Doe'
  *   extractNameFromTemplate('Hello, Chuck Norris!') => 'Chuck Norris'
  */
-function extractNameFromTemplate(/* value */) {
-  throw new Error('Not implemented');
+function extractNameFromTemplate(value) {
+  return value.slice(7, value.length - 1);
 }
 
 /**
@@ -428,8 +440,8 @@ function extractNameFromTemplate(/* value */) {
  *   unbracketTag('<span>') => 'span'
  *   unbracketTag('<a>') => 'a'
  */
-function unbracketTag(/* str */) {
-  throw new Error('Not implemented');
+function unbracketTag(str) {
+  return str.replace('<', '').replace('>', '');
 }
 
 /**
@@ -467,8 +479,32 @@ function extractEmails(str) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  let changedStrCode = '';
+  for (let i = 0; i < str.length; i += 1) {
+    const codeChar = str[i].charCodeAt();
+    let newCodeChar = codeChar + 13;
+    if (codeChar === 32) {
+      changedStrCode += String.fromCharCode(newCodeChar - 13);
+    } else if (codeChar === 63) {
+      newCodeChar = 63;
+      changedStrCode += String.fromCharCode(newCodeChar);
+    } else if (codeChar === 33) {
+      newCodeChar = 33;
+      changedStrCode += String.fromCharCode(newCodeChar);
+    } else if (codeChar >= 65 && codeChar <= 90) {
+      if (newCodeChar > 90) {
+        newCodeChar = newCodeChar - 91 + 65;
+      }
+      changedStrCode += String.fromCharCode(newCodeChar);
+    } else if (codeChar >= 97 && codeChar <= 122) {
+      if (newCodeChar > 122) {
+        newCodeChar = newCodeChar - 123 + 97;
+      }
+      changedStrCode += String.fromCharCode(newCodeChar);
+    }
+  }
+  return changedStrCode;
 }
 
 /**
@@ -484,7 +520,7 @@ function encodeToRot13(/* str */) {
  * (see https://en.wikipedia.org/wiki/Standard_52-card_deck)
  * Function returns the zero-based index of specified card in the initial deck above.
  *
- * @param {string} value - The card value.
+ * @param {string} value )- The card value.
  * @return {number} - The zero-based index.
  *
  * @example
@@ -495,8 +531,63 @@ function encodeToRot13(/* str */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const playDeck = [
+    'A♣',
+    '2♣',
+    '3♣',
+    '4♣',
+    '5♣',
+    '6♣',
+    '7♣',
+    '8♣',
+    '9♣',
+    '10♣',
+    'J♣',
+    'Q♣',
+    'K♣',
+    'A♦',
+    '2♦',
+    '3♦',
+    '4♦',
+    '5♦',
+    '6♦',
+    '7♦',
+    '8♦',
+    '9♦',
+    '10♦',
+    'J♦',
+    'Q♦',
+    'K♦',
+    'A♥',
+    '2♥',
+    '3♥',
+    '4♥',
+    '5♥',
+    '6♥',
+    '7♥',
+    '8♥',
+    '9♥',
+    '10♥',
+    'J♥',
+    'Q♥',
+    'K♥',
+    'A♠',
+    '2♠',
+    '3♠',
+    '4♠',
+    '5♠',
+    '6♠',
+    '7♠',
+    '8♠',
+    '9♠',
+    '10♠',
+    'J♠',
+    'Q♠',
+    'K♠',
+  ];
+
+  return playDeck.indexOf(value);
 }
 
 module.exports = {
